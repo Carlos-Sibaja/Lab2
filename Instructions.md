@@ -3,7 +3,8 @@
 In this part you will research and compare two of the popular web scraping libraries and
 recommend your choice based on benchmarks and ease of use.
 Three common and popular libraries are 
-* Scrapy, BeautifulSoup
+* Scrapy,
+* BeautifulSoup
 * MechanicalSoup, and
 * Playwright (browser automation) 
 *but you are not limited to these. You can use any other library as well.

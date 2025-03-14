@@ -1,25 +1,73 @@
 # deactivate to deactivate the virtual environment  .venv\Scripts\deactivate
 # .venv\Scripts\Activate.ps1 to activate the virtual environment
 # python -m venv .venv to create the virtual environment
+# pip install -r requirements.txt to install the required packages
+# pip freeze > requirements.txt to save the installed packages
+# pip install scraper
+# pip python main.py
 
-print("hola mundo")
-grupo = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+import requests
+import csv  # Import the csv module
+import json  # Import the json module
+from bs4 import BeautifulSoup  # Import the BeautifulSoup class from the bs4 module
+import mechanicalsoup  # Import the mechanicalsoup module
+from playwright.sync_api import sync_playwright  # Import the sync_playwright class from the playwright.sync_api module  
+from scrapy import Selector # Import the Selector class from the scrapy module   
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-for i in range(2):
-    print(grupo[i])
+print("LAB 2: Web Scraping with Python")
+print("This program scrapes articles from CNN based on the topic you provide.")
+from Scraper import (
+    scrape_cnn_beautifulsoup,
+    scrape_cnn_mechanicalsoup,
+    scrape_cnn_playwright,
+    scrape_cnn_scrapy,
+    scrape_dynamic_content,
+    save_results
+)
 
-print("La Letra " + grupo[-1] + " esta en la posicion " + str(grupo.index(grupo[-1])+1))
+def main():
+    topic = input("Which topic do you want to scrape? ")
+    print("Select the scraping method:")
+    print("1. BeautifulSoup")
+    print("2. MechanicalSoup")
+    print("3. Playwright")
+    print("4. Scrapy")
+    print("5. Selenium (Dynamic Content)")
+    print("6. All (Run all methods)")
+    choice = input("Enter the number (1-6): ")
 
-print("\033[1mLa Letra " + grupo[-2] + " esta en la posicion " + str(grupo.index(grupo[-2])+1) + "\033[0m")
+    articles = []
 
-
-userinput = input("Ingrese una letra: ")
-
-if userinput in grupo:
-    print("Esta letra " + userinput + " esta en " + str(grupo.index(userinput)+1))
-else:
-    userinput = input("Letra minúscula por favor, no número. Ingrese una letra: ")
-    if userinput in grupo:
-        print("Esta letra " + userinput + " esta en " + str(grupo.index(userinput)+1))
+    if choice == "1":
+        articles = scrape_cnn_beautifulsoup(topic)
+    elif choice == "2":
+        articles = scrape_cnn_mechanicalsoup(topic)
+    elif choice == "3":
+        articles = scrape_cnn_playwright(topic)
+    elif choice == "4":
+        articles = scrape_cnn_scrapy(topic)
+    elif choice == "5":
+        articles = scrape_dynamic_content(topic)
+    elif choice == "6":
+        print("Running all scrapers...")
+        articles.extend(scrape_cnn_beautifulsoup(topic))
+        articles.extend(scrape_cnn_mechanicalsoup(topic))
+        articles.extend(scrape_cnn_playwright(topic))
+        articles.extend(scrape_cnn_scrapy(topic))
+        articles.extend(scrape_dynamic_content(topic))
     else:
-        print("La letra ingresada no está en el grupo.")
+        print("Invalid choice. Exiting.")
+        return
+    
+    if articles:
+        save_results(articles, filename=f"output_{topic}")
+    else:
+        print("No articles found.")
+
+if __name__ == "__main__":
+    main()
