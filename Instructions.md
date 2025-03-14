@@ -12,6 +12,11 @@ Three common and popular libraries are
 Once you select a library, please use it to scrape any public site, e.g. a particular subreddit
 or a news website and collect at least 100 articles / pages on a topic of your choice.
 
+Describir porque lo escogimos, 
+Score?   Escalas.   -1  a 1 
+LAMA from Face,  free benchmark.
+DEADLINE 28 ABBRIL
+
 ## Part 2: Text analysis
 In this part you will apply at least 2 algorithms to do text analysis on the data you collected
 in part 1. 
