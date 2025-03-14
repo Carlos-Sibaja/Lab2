@@ -15,14 +15,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 CNN_URL = "https://edition.cnn.com/search?q={}&size=10&page=1"
+WIKIPEDIA_URL = "https://en.wikipedia.org/wiki/{}"
 
 # -------------------------- BEAUTIFULSOUP SCRAPER --------------------------
 def scrape_cnn_beautifulsoup(topic, max_articles=10):
     url = CNN_URL.format(topic.replace(" ", "%20"))
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        "Accept-Language": "en-US,en;q=0.9"
-    }
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "Accept-Language": "en-US,en;q=0.9"
+}
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text, "html.parser")
     
@@ -41,6 +42,28 @@ def scrape_cnn_beautifulsoup(topic, max_articles=10):
     
     return articles
 
+def scrape_wikipedia_beautifulsoup(topic, max_articles=10):
+    url = WIKIPEDIA_URL.format(topic.replace(" ", "_"))
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept-Language": "en-US,en;q=0.9"
+    }
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
+    
+    print(soup.prettify())  # Debug: Check the HTML structure
+
+    articles = []
+    for item in soup.find_all("p")[:max_articles]:
+        text = item.get_text(strip=True)
+        if text:
+            articles.append({
+                "text": text,
+                "source": "BeautifulSoup"
+            })
+    
+    return articles
+
 # -------------------------- MECHANICALSOUP SCRAPER --------------------------
 def scrape_cnn_mechanicalsoup(topic, max_articles=10):
     browser = mechanicalsoup.StatefulBrowser()
@@ -52,6 +75,22 @@ def scrape_cnn_mechanicalsoup(topic, max_articles=10):
         title = item.get_text()
         link = "https://edition.cnn.com" + item.a["href"] if item.a else ""
         articles.append({"title": title, "url": link, "source": "MechanicalSoup"})
+    
+    return articles
+
+def scrape_wikipedia_mechanicalsoup(topic, max_articles=10):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open(WIKIPEDIA_URL.format(topic.replace(" ", "_")))
+    soup = browser.page
+    
+    articles = []
+    for item in soup.find_all("p")[:max_articles]:
+        text = item.get_text(strip=True)
+        if text:
+            articles.append({
+                "text": text,
+                "source": "MechanicalSoup"
+            })
     
     return articles
 
@@ -75,6 +114,28 @@ def scrape_cnn_playwright(topic, max_articles=10):
     
     return articles
 
+def scrape_wikipedia_playwright(topic, max_articles=10):
+    articles = []
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(WIKIPEDIA_URL.format(topic.replace(" ", "_")))
+        
+        page.wait_for_selector("p")
+        elements = page.query_selector_all("p")
+        
+        for item in elements[:max_articles]:
+            text = item.inner_text()
+            if text:
+                articles.append({
+                    "text": text,
+                    "source": "Playwright"
+                })
+        
+        browser.close()
+    
+    return articles
+
 # -------------------------- SCRAPY SCRAPER --------------------------
 def scrape_cnn_scrapy(topic, max_articles=10):
     url = CNN_URL.format(topic.replace(" ", "%20"))
@@ -89,11 +150,27 @@ def scrape_cnn_scrapy(topic, max_articles=10):
     
     return articles
 
+def scrape_wikipedia_scrapy(topic, max_articles=10):
+    url = WIKIPEDIA_URL.format(topic.replace(" ", "_"))
+    response = requests.get(url)
+    selector = Selector(text=response.text)
+    
+    articles = []
+    for item in selector.css("p")[:max_articles]:
+        text = item.css("::text").get()
+        if text:
+            articles.append({
+                "text": text,
+                "source": "Scrapy"
+            })
+    
+    return articles
+
 # -------------------------- SAVE RESULTS --------------------------
 def save_results(articles, filename="output"):
     # Save as CSV
     with open(f"{filename}.csv", "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=["source", "title", "url"])
+        writer = csv.DictWriter(file, fieldnames=["source", "text"])
         writer.writeheader()
         writer.writerows(articles)
     
@@ -105,31 +182,29 @@ def save_results(articles, filename="output"):
 
 # -------------------------- DYNAMIC CONTENT SCRAPER --------------------------
 def scrape_dynamic_content(topic, max_articles=10):
-    driver_path = "path/to/chromedriver"  # Replace with the actual path to your ChromeDriver executable
+driver_path = "path/to/chromedriver"  # Replace with the actual path to your ChromeDriver executable
     service = Service(driver_path)
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')  # Run Chrome in headless mode
     driver = webdriver.Chrome(service=service, options=options)
     
-    url = CNN_URL.format(topic.replace(" ", "%20"))
+    url = WIKIPEDIA_URL.format(topic.replace(" ", "_"))
     driver.get(url)
     
-    # Wait for the search results to load
+    # Wait for the content to load
     WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "div.cnn-search__result-contents"))
+        EC.presence_of_element_located((By.CSS_SELECTOR, "p"))
     )
     
     soup = BeautifulSoup(driver.page_source, "html.parser")
     driver.quit()
-    
+
     articles = []
-    for item in soup.find_all("div", class_="cnn-search__result-contents")[:max_articles]:
-        title = item.find("h3", class_="cnn-search__result-headline")
-        link = item.find("a", href=True)
-        if title and link:
+    for item in soup.find_all("p")[:max_articles]:
+        text = item.get_text(strip=True)
+        if text:
             articles.append({
-                "title": title.get_text(strip=True),
-                "url": "https://edition.cnn.com" + link["href"],
+                "text": text,
                 "source": "Selenium"
             })
     

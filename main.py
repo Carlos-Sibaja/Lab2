@@ -20,12 +20,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 print("LAB 2: Web Scraping with Python")
-print("This program scrapes articles from CNN based on the topic you provide.")
+print("This program scrapes articles from Wikipedia based on the topic you provide.")
 from Scraper import (
-    scrape_cnn_beautifulsoup,
-    scrape_cnn_mechanicalsoup,
-    scrape_cnn_playwright,
-    scrape_cnn_scrapy,
+    scrape_wikipedia_beautifulsoup,
+    scrape_wikipedia_mechanicalsoup,
+    scrape_wikipedia_playwright,
+    scrape_wikipedia_scrapy,
     scrape_dynamic_content,
     save_results
 )
@@ -44,21 +44,21 @@ def main():
     articles = []
 
     if choice == "1":
-        articles = scrape_cnn_beautifulsoup(topic)
+        articles = scrape_wikipedia_beautifulsoup(topic)
     elif choice == "2":
-        articles = scrape_cnn_mechanicalsoup(topic)
+        articles = scrape_wikipedia_mechanicalsoup(topic)
     elif choice == "3":
-        articles = scrape_cnn_playwright(topic)
+        articles = scrape_wikipedia_playwright(topic)
     elif choice == "4":
-        articles = scrape_cnn_scrapy(topic)
+        articles = scrape_wikipedia_scrapy(topic)
     elif choice == "5":
         articles = scrape_dynamic_content(topic)
     elif choice == "6":
         print("Running all scrapers...")
-        articles.extend(scrape_cnn_beautifulsoup(topic))
-        articles.extend(scrape_cnn_mechanicalsoup(topic))
-        articles.extend(scrape_cnn_playwright(topic))
-        articles.extend(scrape_cnn_scrapy(topic))
+        articles.extend(scrape_wikipedia_beautifulsoup(topic))
+        articles.extend(scrape_wikipedia_mechanicalsoup(topic))
+        articles.extend(scrape_wikipedia_playwright(topic))
+        articles.extend(scrape_wikipedia_scrapy(topic))
         articles.extend(scrape_dynamic_content(topic))
     else:
         print("Invalid choice. Exiting.")
