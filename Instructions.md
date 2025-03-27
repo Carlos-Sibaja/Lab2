@@ -12,6 +12,12 @@ Three common and popular libraries are
 Once you select a library, please use it to scrape any public site, e.g. a particular subreddit
 or a news website and collect at least 100 articles / pages on a topic of your choice.
 
+1 enlaces
+2 abrir esos enlaces y buscar "p"
+3 guardar los textos. 
+
+LLM  anlizar esos textos y poner un score sentimientos. 
+
 Describir porque lo escogimos, 
 Score?   Escalas.   -1  a 1 
 LAMA from Face,  free benchmark.
@@ -30,3 +36,6 @@ Please come up with a summary of each page along with an importance score which 
 The importance score should also have direction (positive or negative).
 
 Please present the outcome of this analysis in a tabulated form along with your code.
+
+## NOTAS
+1. Necesito que una vez que encuetra el resultado. 

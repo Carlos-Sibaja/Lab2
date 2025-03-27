@@ -107,7 +107,7 @@ def save_results(articles, filename="output"):
     
     # Save as CSV
     with open(f"{filename}.csv", "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=["source", "url", "text"])
+        writer = csv.DictWriter(file, fieldnames=["source", "text"])
         writer.writeheader()
         writer.writerows(articles)
     
@@ -134,7 +134,7 @@ def scrape_dynamic_content(topic, max_articles=10):
     # Wait for content to load
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "p"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "a"))
         )
     except:
         print(f"❌ Error: Could not load content for {topic}")
@@ -146,12 +146,11 @@ def scrape_dynamic_content(topic, max_articles=10):
     driver.quit()
 
     articles = []
-    for item in soup.find_all("p")[:max_articles]:
+    for item in soup.find_all("a")[:max_articles]:
         text = item.get_text(strip=True)
         if text:
             articles.append({
-                "source": "Wikipedia",
-                "url": url,  # ADD URL HERE
+                "source": url,
                 "text": text
             })
     
