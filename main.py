@@ -16,63 +16,57 @@ async def scrape_reddit_old():
     results = []
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)  # Set to True to run headless
+        # Launch a visible Chromium browser
+        browser = await p.chromium.launch(headless=False)
         page = await browser.new_page()
 
-        print("🔎 Searching Reddit (old version) for 'Trump'...")
+        print("🔎 Searching Reddit (old.reddit.com) for 'Trump'...")
+        # Navigate to the old Reddit search page
         await page.goto("https://old.reddit.com/search?q=trump", timeout=60000)
+
+        # Wait until search results are visible
         await page.wait_for_selector("div.search-result", timeout=15000)
 
+        # Get all search result containers
         posts = await page.query_selector_all("div.search-result")
-        print(f"Found {len(posts)} results. Extracting top 10...\n")
+        print(f"🔍 Found {len(posts)} results. Extracting top 10...\n")
 
-        for i, post in enumerate(posts[:20]):
+        # Loop through the first 10 posts
+        for i, post in enumerate(posts[:10]):
             try:
-                # Title and URL
+                # Get the title element
                 title_el = await post.query_selector("a.search-title")
                 title = await title_el.inner_text()
+
+                # Get the URL (relative or absolute)
                 url = await title_el.get_attribute("href")
 
-                # Preview text – just one line
-                preview_el = await post.query_selector("div.search-expando")
-                preview_raw = await preview_el.inner_text() if preview_el else ""
-                preview_line = preview_raw.strip().split("\n")[0] if preview_raw else ""
-
-                # Subreddit
-                subreddit_el = await post.query_selector("a.search-subreddit-link")
-                subreddit = await subreddit_el.inner_text() if subreddit_el else "unknown"
-
-                # Date
+                # Get the post date as shown on Reddit
                 time_el = await post.query_selector("time")
                 post_time = await time_el.inner_text() if time_el else "unknown"
 
-                # Print to console
-                print(f"POST #{i+1}")
-                print(f"Title: {title}")
-                print(f"URL: {url}")
-                print(f"Subreddit: {subreddit}")
-                print(f"Date: {post_time}")
-                print(f"Preview: {preview_line}")
+                # Print each result to the console
+                print(f"{i+1}: Title: {title}")
+                print(f"   Date: {post_time}")
+                print(f"   URL: {url}\n")
 
-                # Append result
+                # Add to results list
                 results.append({
                     "title": title.strip(),
                     "url": url.strip(),
-                    "subreddit": subreddit.strip(),
-                    "date": post_time.strip(),
-                    "preview_text": preview_line.strip()
+                    "date": post_time.strip()
                 })
 
             except Exception as e:
-                print(f"⚠️ Error in post #{i+1}: {e}")
+                print(f"⚠️ Skipping post #{i+1} due to error: {e}")
                 continue
 
         await browser.close()
 
-    # Save to CSV
+    # Save results to CSV
     df = pd.DataFrame(results)
     df.to_csv("reddit_trump_posts.csv", index=False)
     print("✅ CSV saved as 'reddit_trump_posts.csv'.")
 
-# Run it
+# Run the scraper
 asyncio.run(scrape_reddit_old())
