@@ -2,24 +2,25 @@ import asyncio
 import pandas as pd
 from urllib.parse import quote
 from playwright.async_api import async_playwright
-from b_extract_text import extract_all_texts  # Importa la función para extraer texto
+from b_extract_text import extract_all_texts  # Import the function to extract text
 from c_LLM import analyze_csv, create_summary_dataframe, plot_sentiment_distribution
 
-# Define los términos de búsqueda
+# Define the search terms
 SEARCH_TERMS = [
-    "signal",
-    "trump logros",
     "trump",
+    "trump logros",
+    "signal",
     "trump aranceles",
     "ucrania",
-    "trump Deportaciones",
+    "trump depoortaciones",
     "MAGA",
-    "trump éxito económico",
+    "trump avance económico",
     "acuerdo de paz",
+    "inmigración",
     "trump inmigración",
 ]
 
-# Función para realizar el scraping de El País
+# Function to scrape articles from El País
 async def scrape_elpais():
     base_url = "https://elpais.com/buscador/?q="
     results = []
@@ -43,21 +44,21 @@ async def scrape_elpais():
                     continue
                 title = await title_element.inner_text()
                 link = await title_element.get_attribute("href")
-                date_element = await article.query_selector("time")
-                date = await date_element.get_attribute("datetime") if date_element else "NO DATE"
 
+                # Append the article data to the results list
                 results.append({
                     'title': title.strip(),
-                    'url': f"https://elpais.com{link}" if link.startswith("/") else link,
-                    'date': date.strip() if date else 'NO DATE'
+                    'url': f"https://elpais.com{link}" if link.startswith("/") else link
                 })
 
-                if len(results) >= 5:
+                if len(results) >= 100:  # Limit the number of articles per search term
                     break
-            if len(results) >= 5:
+            if len(results) >= 100:
                 break
 
         await browser.close()
     return results
 
-asyncio.run(scrape_elpais())
+# Run the program
+if __name__ == "__main__":
+    asyncio.run(scrape_elpais())
