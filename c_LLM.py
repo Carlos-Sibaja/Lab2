@@ -216,7 +216,7 @@ def plot_sentiment_distribution(df):
         df (DataFrame): The input DataFrame containing sentiment analysis results.
     """
     # Create a smaller figure
-    fig, axes = plt.subplots(1, 2, figsize=(6, 4), sharey=True)  # Smaller size (8x4)
+    fig, axes = plt.subplots(1, 2, figsize=(8, 4), sharey=True)  # Smaller size (8x4)
 
     # Define the consistent order of sentiment categories
     sentiment_order = ["positive", "neutral", "negative"]
@@ -226,7 +226,7 @@ def plot_sentiment_distribution(df):
     axes[0].bar(hugging_counts.index, hugging_counts.values, color=["green", "blue", "red"])
     axes[0].set_title("Hugging Face Sentiment Distribution", fontsize=8)
     axes[0].set_xlabel("Sentiment", fontsize=8)
-    axes[0].set_ylabel("Count", fontsize=8)
+    axes[0].set_ylabel("Count", fontsize=6)
 
     # NLTK sentiment distribution
     nltk_counts = df["direction_nltk"].value_counts().reindex(sentiment_order, fill_value=0)
@@ -237,8 +237,18 @@ def plot_sentiment_distribution(df):
     # Adjust layout to center the plots and reduce whitespace
     plt.subplots_adjust(left=0.1, right=0.9, top=0.85, bottom=0.2, wspace=0.4)
 
-    # Display the plot in Streamlit
-    st.pyplot(fig)
+    # --- Center and resize the plot in Streamlit ---
+    st.markdown("""
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <div style="width:33%; border: 1px solid #ddd; padding: 10px; border-radius: 10px;">
+    """, unsafe_allow_html=True)
+
+    st.pyplot(fig, use_container_width=True)
+
+    st.markdown("""
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     input_file = "trump100_elpais_with_text.csv"

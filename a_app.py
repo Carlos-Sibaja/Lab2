@@ -12,16 +12,16 @@ from c_LLM import plot_sentiment_distribution, create_summary_dataframe
 st.set_page_config(
     page_title="Trump Sentiment",
     page_icon="🧐",
-    layout="wide"
+    layout="centered",
 )
 
 # --- Ajuste de ancho y centrado ---
 st.markdown("""
     <style>
         .main {
-            max-width: 90%;
-            margin-left: 10%;
-            margin-right: 10%;
+            max-width: 100;
+            margin-left: 5%;
+            margin-right: 5%;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -61,16 +61,30 @@ st.dataframe(summary_df)  # Display the summary as a table
 # Step 3 - Metadata CSV
 st.header("3️⃣ Metadata CSV - trump100_elpais.csv")
 st.write("This table shows the metadata of the articles scraped from El País.")
+
 df_meta = pd.read_csv(csv_meta)  # Load the metadata file
 st.dataframe(df_meta)  # Display the metadata as a table
+st.markdown(
+    "<p style='font-size:12px; color:blue;'>Scroll right to see all columns.</p>",
+    unsafe_allow_html=True
+)
 
 # Step 4 - Extracted Texts
 st.header("4️⃣ Extracted Texts - First 5 Rows")
 st.write("Sample of extracted texts from the articles.")
+
 df_texts = pd.read_csv(csv_texts)  # Load the extracted texts file
 st.dataframe(df_texts.head())  # Display the first 5 rows of the extracted texts
+st.markdown(
+    "<p style='font-size:12px; color:blue;'>Scroll right to see all columns.</p>",
+    unsafe_allow_html=True
+)
 
 # Step 5 - Full Analyzed CSV
 st.header("5️⃣ Full Analyzed CSV")
 st.write("Full analyzed data with sentiment scores and directions.")
 st.dataframe(df_analyzed)  # Display the full analyzed data
+st.markdown(
+    "<p style='font-size:12px; color:blue;'>Scroll right to see all columns.</p>",
+    unsafe_allow_html=True
+)
