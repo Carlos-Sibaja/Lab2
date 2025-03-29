@@ -15,7 +15,7 @@ import pandas as pd
 import os
 from a_scraper import scrape_elpais
 from b_extract_text import extract_all_texts
-from c_LLM import analyze_csv
+from c_LLM import analyze_csv, create_summary_dataframe
 
 async def main():
     # Step 1 - Scraping
