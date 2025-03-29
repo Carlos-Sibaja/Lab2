@@ -14,9 +14,14 @@ The project is divided into two main parts:
    - **BeautifulSoup**
    - **MechanicalSoup**
    - **Playwright** (browser automation)
+   - **Selenium** (used for benchmarking but removed in the final version).
+
 2. Selected **Playwright** for its ease of use, modern browser automation capabilities, and ability to handle dynamic content.
-3. Scraped a public news website (**El País**) to collect at least 100 articles on a specific topic (e.g., "Trump").
+
+3. Scraped a public news website (**El País**) to collect at least 100 articles on a specific topic related to "Trump."
+
 4. Extracted the main content of each article by targeting `<p>` tags within the article body.
+
 5. Saved the scraped data (titles, URLs, and article texts) into a CSV file (`trump100_elpais_with_text.csv`).
 
 ### **Part 2: Text Analysis**
@@ -27,7 +32,7 @@ The project is divided into two main parts:
 3. Calculated an **importance score** for each article based on:
    - Sentiment confidence scores.
    - Text length.
-   - Direction (positive or negative).
+   - Sentiment direction (positive or negative).
 4. Presented the results in a tabulated format (`trump_analyzed.csv`) with the following columns:
    - `title`: Title of the article.
    - `importance_score`: A normalized score between `-1` and `1` indicating the importance of the article.
@@ -55,7 +60,7 @@ The project is organized into the following files:
 ### **3. `c_LLM.py`**
 - Performs text analysis, including:
   - Sentiment analysis using Hugging Face and NLTK.
-  - Summarization using Sumy LSA Summarizer.
+  - Summarization using the Sumy LSA Summarizer.
   - Calculation of the importance score.
 - Saves the analyzed data to `trump_analyzed.csv`.
 - Generates a summary DataFrame with average metrics and visualizes sentiment distributions.
@@ -66,9 +71,6 @@ The project is organized into the following files:
   2. Extracts article texts.
   3. Performs text analysis.
   4. Generates a summary and visualizations.
-
----
-
 ## Tools and Libraries Used
 - **Playwright**: For web scraping and browser automation.
 - **Pandas**: For data manipulation and CSV handling.
@@ -77,6 +79,7 @@ The project is organized into the following files:
 - **Sumy**: For text summarization using the LSA algorithm.
 - **Matplotlib**: For visualizing sentiment distributions.
 - **Streamlit**: For displaying plots interactively.
+- **ftfy**: For cleaning text. Spanish characters created difficulties during sentiment processing.
 
 ---
 
@@ -84,3 +87,11 @@ The project is organized into the following files:
 1. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
+   ```
+
+   Local URL: http://localhost:8501
+   Network URL: http://10.0.0.44:8501
+   https://lab2-sentiment.streamlit.app/
+
+## Documentation
+1. **GitHub** https://github.com/Carlos-Sibaja/Lab2.git

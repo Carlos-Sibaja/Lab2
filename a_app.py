@@ -36,6 +36,18 @@ st.markdown("<h3 style='color: blue; font-size: 10pt;'>Carlos Sibaja Jimenez Id:
 # Title
 st.markdown("<h2 style='color: orange; font-weight: bold;'>Sentiment Analysis - Trump from Newspaper El País</h2>", unsafe_allow_html=True)
 
+st.write("This app analyzes the sentiment of 100 articles related to Trump from El País newspaper. "
+"It provides a summary of the sentiment distribution, metadata, and extracted texts. "
+"The articles were scraped from El País and analyzed using Hugging Face and NLTK libraries. ")
+
+st.write("Run and Documentation:")
+st.write("""
+- **Console command:** `streamlit run a_app.py`
+- **Local URL:** [http://localhost:8501](http://localhost:8501)
+- **Online deployed version:** [https://lab2-sentiment.streamlit.app/](https://lab2-sentiment.streamlit.app/)
+- **Please review at Readme.md for more datails, also refer to the Github repository for the complete code**         
+""")
+
 # CSV files
 csv_meta = "trump100_elpais.csv"
 csv_texts = "trump100_elpais_with_text.csv"
