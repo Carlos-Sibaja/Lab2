@@ -2,8 +2,10 @@ import asyncio
 import pandas as pd
 from urllib.parse import quote
 from playwright.async_api import async_playwright
-from b_extract_text import extract_all_texts  # Import the function to extract text
+from b_extract_text import extract_all_texts  
 from c_LLM import analyze_csv, create_summary_dataframe, plot_sentiment_distribution
+
+# a_scraper.py
 
 # Define the search terms
 SEARCH_TERMS = [
@@ -12,7 +14,7 @@ SEARCH_TERMS = [
     "signal",
     "trump aranceles",
     "ucrania",
-    "trump depoortaciones",
+    "trump deportaciones",
     "MAGA",
     "trump avance económico",
     "acuerdo de paz",
@@ -45,20 +47,18 @@ async def scrape_elpais():
                 title = await title_element.inner_text()
                 link = await title_element.get_attribute("href")
 
-                # Append the article data to the results list
                 results.append({
                     'title': title.strip(),
                     'url': f"https://elpais.com{link}" if link.startswith("/") else link
                 })
 
-                if len(results) >= 100:  # Limit the number of articles per search term
+                if len(results) >= 10:
                     break
-            if len(results) >= 100:
+            if len(results) >= 10:
                 break
 
         await browser.close()
     return results
 
-# Run the program
 if __name__ == "__main__":
     asyncio.run(scrape_elpais())
