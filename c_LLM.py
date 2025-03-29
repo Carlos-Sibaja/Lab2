@@ -8,6 +8,8 @@ from transformers import pipeline, AutoTokenizer
 import matplotlib.pyplot as plt
 from nltk.sentiment import SentimentIntensityAnalyzer
 import streamlit as st
+import nltk
+nltk.download('vader_lexicon', quiet=True)
 
 # Initialize Hugging Face sentiment pipeline
 sentiment_pipeline = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")

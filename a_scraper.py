@@ -52,9 +52,9 @@ async def scrape_elpais():
                     'url': f"https://elpais.com{link}" if link.startswith("/") else link
                 })
 
-                if len(results) >= 10:
+                if len(results) >= 7:
                     break
-            if len(results) >= 10:
+            if len(results) >= 17:
                 break
 
         await browser.close()
