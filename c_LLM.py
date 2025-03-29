@@ -142,25 +142,24 @@ def create_summary_dataframe(df):
         "Hugging Face": [hugging_avg_direction, hugging_avg_confidence, avg_importance_score],
         "NLTK": [nltk_avg_direction, nltk_avg_confidence, None]
     })
-    print(summary_df)
     return summary_df
 
 def plot_sentiment_distribution(df):
-    fig, axes = plt.subplots(1, 2, figsize=(8, 4), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
     sentiment_order = ["positive", "neutral", "negative"]
 
     hugging_counts = df["direction_hugging"].value_counts().reindex(sentiment_order, fill_value=0)
     axes[0].bar(hugging_counts.index, hugging_counts.values, color=["green", "blue", "red"])
-    axes[0].set_title("Hugging Face Sentiment Distribution", fontsize=8)
+    axes[0].set_title("Hugging Face Sentiment Distribution", fontsize=8, color="blue")
     axes[0].set_xlabel("Sentiment", fontsize=8)
-    axes[0].set_ylabel("Count", fontsize=6)
+    axes[0].set_ylabel("Count", fontsize=5)
 
     nltk_counts = df["direction_nltk"].value_counts().reindex(sentiment_order, fill_value=0)
     axes[1].bar(nltk_counts.index, nltk_counts.values, color=["green", "blue", "red"])
-    axes[1].set_title("NLTK Sentiment Distribution", fontsize=8)
+    axes[1].set_title("NLTK Sentiment Distribution", fontsize=8, color="blue")
     axes[1].set_xlabel("Sentiment", fontsize=8)
 
-    plt.subplots_adjust(left=0.1, right=0.9, top=0.85, bottom=0.2, wspace=0.4)
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.85, bottom=0.2, wspace=0.2)
 
     st.markdown("""
         <div style="display: flex; justify-content: center; margin-top: 20px;">

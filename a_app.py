@@ -13,14 +13,14 @@ from c_LLM import plot_sentiment_distribution, create_summary_dataframe
 st.set_page_config(
     page_title="Trump Sentiment",
     page_icon="🧐",
-    layout="centered",
+    layout="wide",
 )
 
 # --- Adjust width and centering ---
 st.markdown("""
     <style>
         .main {
-            max-width: 100;
+            max-width: 90%;
             margin-left: 5%;
             margin-right: 5%;
         }
@@ -66,14 +66,14 @@ st.dataframe(df_meta)
 st.markdown("<p style='font-size:12px; color:blue;'>Scroll right to see all columns.</p>", unsafe_allow_html=True)
 
 # Step 4 - Extracted Texts
-st.header("4️⃣ Extracted Texts - First 5 Rows")
+st.header("4️⃣ Text Extraction - First 5 Rows")
 st.write("Sample of extracted texts from the articles.")
 df_texts = pd.read_csv(csv_texts)
 st.dataframe(df_texts.head())
 st.markdown("<p style='font-size:12px; color:blue;'>Scroll right to see all columns.</p>", unsafe_allow_html=True)
 
 # Step 5 - Full Analyzed CSV
-st.header("5️⃣ Full Analyzed CSV")
+st.header("5️⃣ Text Analyzed CSV")
 st.write("Full analyzed data with sentiment scores and directions.")
 st.dataframe(df_analyzed)
 st.markdown("<p style='font-size:12px; color:blue;'>Scroll right to see all columns.</p>", unsafe_allow_html=True)
