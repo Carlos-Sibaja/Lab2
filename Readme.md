@@ -5,6 +5,27 @@ This project focuses on learning and applying web scraping techniques and text a
 
 ---
 
+## Explanation of the Results
+After analyzing 100 news articles related to Trump from **El País**, two sets of sentiment analysis results were obtained using two different libraries. A second library was used because the text was in Spanish, and feedback suggested that using translated, adapted, or foreign texts (like El País articles originally in Spanish, even if translated) might misinterpret the sentiment. This allowed me to observe how different the results could be.
+
+### Sentiment Direction
+- **Hugging Face**: The articles have an average sentiment direction of **-0.88**, suggesting that the majority of the articles express a clearly negative sentiment toward Trump.
+- **NLTK**: The average sentiment direction is **0.25**, indicating that, on average, the articles tend to show a slightly positive or neutral sentiment.
+
+### Importance Scores
+- **Hugging Face**: Provides an average importance score of **0.3069**, suggesting that the model detected a moderate level of importance in the text features used to make the sentiment predictions.
+- **NLTK**: Does not provide an importance score.
+
+### Confidence Scores
+- **Hugging Face**: The average confidence score is **0.3753**.
+- **NLTK**: The average confidence score is **0.2385**.
+Although both scores are relatively low, Hugging Face appears to be more confident in its predictions than NLTK.
+
+### Conclusion
+Based on Hugging Face's results, we can conclude that the articles analyzed tend to have a negative tone regarding Trump. However, the difference in results between the two libraries highlights the challenges of sentiment analysis on translated or adapted texts.
+
+---
+
 ## Project Structure
 The project is divided into two main parts:
 
@@ -71,6 +92,9 @@ The project is organized into the following files:
   2. Extracts article texts.
   3. Performs text analysis.
   4. Generates a summary and visualizations.
+
+---
+
 ## Tools and Libraries Used
 - **Playwright**: For web scraping and browser automation.
 - **Pandas**: For data manipulation and CSV handling.
